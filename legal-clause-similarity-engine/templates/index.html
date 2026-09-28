@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal Clause Similarity Engine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="hero">
+        <div class="brand-pill">◌ Clause Intelligence</div>
+        <h1>Legal Clause <span>Similarity Engine</span></h1>
+        <p>
+            Search 21144 indexed legal clauses by meaning — powered by a trained
+            Word2Vec embedding model and cosine similarity.
+        </p>
+    </header>
+
+    <main class="container">
+        <section class="search-panel">
+            <form action="/search" method="post">
+                <textarea name="query" placeholder="Each party shall keep confidential all information disclosed by the other party.">{{ query or '' }}</textarea>
+                <div class="keyboard-hint">⌘ / Ctrl + ↵</div>
+
+                <div class="filters-row">
+                    <div class="field-group">
+                        <label>Filter by type</label>
+                        <select name="clause_type">
+                            <option>All clause types</option>
+                            <option>Confidentiality</option>
+                            <option>Governing law</option>
+                            <option>Base salary</option>
+                            <option>Termination</option>
+                        </select>
+                    </div>
+
+                    <div class="field-group">
+                        <label>Results</label>
+                        <select name="result_count">
+                            <option>5</option>
+                            <option>10</option>
+                            <option>20</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="primary-btn">⌕ Find similar clauses</button>
+                </div>
+
+                <div class="tag-row">
+                    <span>Try:</span>
+                    <button type="submit" name="query" value="Confidentiality" class="tag-btn">Confidentiality</button>
+                    <button type="submit" name="query" value="Governing law" class="tag-btn">Governing law</button>
+                    <button type="submit" name="query" value="Base salary" class="tag-btn">Base salary</button>
+                    <button type="submit" name="query" value="Termination" class="tag-btn">Termination</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="results-header">
+            <h2>Top 5 matches</h2>
+            <div class="results-filter">All clause types</div>
+        </section>
+
+        <div class="result-list">
+            {% if results %}
+                {% for r in results %}
+                <article class="result-card">
+                    <div class="result-type">{{ r.clause_type or 'Clause type' }}</div>
+                    <div class="result-score">#{{ loop.index }}</div>
+                    <p>{{ r.clause }}</p>
+                    <div class="score-row">
+                        <span>Similarity</span>
+                        <strong>{{ r.similarity_score }}</strong>
+                    </div>
+                </article>
+                {% endfor %}
+            {% else %}
+                <article class="result-card placeholder-card">
+                    <div class="result-type">Confidentiality</div>
+                    <div class="result-score">#1</div>
+                    <p>Each party shall keep confidential all information disclosed by the other party.</p>
+                    <div class="score-row">
+                        <span>Similarity</span>
+                        <strong>0.96</strong>
+                    </div>
+                </article>
+            {% endif %}
+        </div>
+    </main>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

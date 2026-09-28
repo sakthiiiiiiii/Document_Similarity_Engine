@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+pandas
+numpy
+gensim
+scikit-learn
+spacy
+nltk
+python-multipart
+jinja2
+joblib
